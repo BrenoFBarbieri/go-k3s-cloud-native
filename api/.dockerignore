@@ -1,0 +1,6 @@
+.git*
+Dockerfile
+build
+random_stuff
+bin
+dist
