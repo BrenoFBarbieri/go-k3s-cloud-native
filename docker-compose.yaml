@@ -1,0 +1,25 @@
+services:
+    registry:
+        image: registry:2
+        container_name: registry
+        restart: unless-stopped
+        ports:
+            - "5000:5000"
+
+    k3s:
+        image: rancher/k3s:v1.35.4-k3s1
+        container_name: k3s
+        hostname: k3s
+        privileged: true
+        restart: unless-stopped
+        command: server
+        ports:
+            - "6443:6443" # Kubernetes API server
+        volumes:
+            - k3s-data:/var/lib/rancher/k3s
+            - ./k8s/registries.yaml:/etc/rancher/k3s/registries.yaml
+        depends_on:
+            - registry
+
+volumes:
+    k3s-data: {}
