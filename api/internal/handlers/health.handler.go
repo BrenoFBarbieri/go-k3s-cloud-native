@@ -3,9 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 )
 
-type HealthHandler struct {}
+type HealthHandler struct{}
 
 func NewHealthHandler() *HealthHandler {
 	return &HealthHandler{}
@@ -13,13 +14,15 @@ func NewHealthHandler() *HealthHandler {
 
 func (h *HealthHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
-		"status": "ok",
-		"service": "album-api",
-		"version": "1.0.0",
+		"status":    "ok",
+		"service":   os.Getenv("APP_NAME"),
+		"version":   os.Getenv("APP_VERSION"),
+		"env":       os.Getenv("APP_ENV"),
+		"jwtSecret": os.Getenv("JWT_SECRET"),
 	}
 
-	w.Header().Set("Content-Type", "application/json");
-	w.WriteHeader(http.StatusOK);
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // Simulate an error for testing
 
-	json.NewEncoder(w).Encode(response);
+	json.NewEncoder(w).Encode(response)
 }
